@@ -1,3 +1,12 @@
+/*
+   Copyright 2016 George Georgovassilis
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ggeorgovassilis.cdw.services.payroll;
 
 import java.util.Calendar;
@@ -9,8 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ggeorgovassilis.cdw.DocumentSigningAspect;
 import ggeorgovassilis.cdw.time.Clock;
 
+/**
+ * Payroll service which exposes expense related functions over a REST API.
+ * The service is assumed decorated by the {@link DocumentSigningAspect}
+ * @author george georgovassilis
+ *
+ */
 @RestController
 @RequestMapping(value = "/api/payroll")
 public class PayrollService {

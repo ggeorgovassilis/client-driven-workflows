@@ -1,3 +1,12 @@
+/*
+   Copyright 2016 George Georgovassilis
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ggeorgovassilis.cdw.services.hr;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ggeorgovassilis.cdw.DocumentSigningAspect;
 import ggeorgovassilis.cdw.time.Clock;
+
+/**
+ * HRservice which exposes employee identification over a REST API.
+ * The service is assumed decorated by the {@link DocumentSigningAspect}
+ * @author george georgovassilis
+ *
+ */
 
 @RestController
 @RequestMapping(value = "/api/hr")

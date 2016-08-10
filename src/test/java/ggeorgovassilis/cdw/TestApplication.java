@@ -1,25 +1,24 @@
+/*
+   Copyright 2016 George Georgovassilis
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+ */
 package ggeorgovassilis.cdw;
 
 import static org.junit.Assert.*;
 
 import java.util.Date;
 
-import javax.servlet.RequestDispatcher;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,7 +68,7 @@ public class TestApplication {
 		PersonnelIdentifier pid = mapper.readValue(response.getContentAsString(), PersonnelIdentifier.class);
 		assertEquals("george@acme.com", pid.getEmail());
 		assertEquals("employed", pid.getEmploymentStatus());
-		assertEquals("FfwVOhoRfSwGOGNLN/tQrg==", pid.getSignature().getHashcode());
+		assertEquals("OLCFai1dGZAjnCqfT14JDQ==", pid.getSignature().getHashcode());
 		assertTrue(pid.getSignature().getValidUntil().after(clock.getNow()));
 
 		// 2. send personnel file to ERP service and get cost centers back
@@ -84,13 +83,13 @@ public class TestApplication {
 		assertEquals("Travel expenses", loc.getCostCenters().get(0).getLabel());
 		assertEquals("c2", loc.getCostCenters().get(1).getId());
 		assertEquals("R&D", loc.getCostCenters().get(1).getLabel());
-		assertEquals("PLFSWGBCw8gcEWIuit14+A==", loc.getSignature().getHashcode());
+		assertEquals("ofzIuGORubX995EjK9XgYg==", loc.getSignature().getHashcode());
 		assertTrue(loc.getSignature().getValidUntil().after(clock.getNow()));
 
-		assertEquals("iteTDcY/qpbIxG8H9c+nsQ==", loc.getCostCenters().get(0).getSignature().getHashcode());
+		assertEquals("ZfNPqgl/YTusU9Xam+j1wA==", loc.getCostCenters().get(0).getSignature().getHashcode());
 		assertTrue(loc.getCostCenters().get(0).getSignature().getValidUntil().after(clock.getNow()));
 
-		assertEquals("3AVTLh5no/83loIfHcPT7g==", loc.getCostCenters().get(1).getSignature().getHashcode());
+		assertEquals("Wy0VfkKgJTpOdGCCTxTvMQ==", loc.getCostCenters().get(1).getSignature().getHashcode());
 		assertTrue(loc.getCostCenters().get(1).getSignature().getValidUntil().after(clock.getNow()));
 
 		// 3. send personnel file and cost center to payroll service
@@ -109,7 +108,7 @@ public class TestApplication {
 		assertEquals(50l, receipt.getAmount().longValue());
 		assertEquals(pid.getEmail(), receipt.getPid().getEmail());
 		assertTrue(receipt.getSignature().getValidUntil().after(clock.getNow()));
-		assertEquals("oBU8O2taefX2Ac5ebHXfIQ==", receipt.getSignature().getHashcode());
+		assertEquals("GHe0BpLYjMuEeGbs/0i5KQ==", receipt.getSignature().getHashcode());
 	}
 
 	@Test
