@@ -20,6 +20,7 @@ import ggeorgovassilis.cdw.time.Clock;
 
 /**
  * Verifies a {@link SignedDocument}
+ * 
  * @author george georgovassilis
  *
  */
@@ -29,36 +30,39 @@ public class DocumentVerifier {
 
 	@Autowired
 	Clock clock;
-	
+
 	@Autowired
 	HashcodeComputer hashcodeComputer;
 
 	ObjectMapper mapper = new ObjectMapper();
 
 	/**
-	 * Verify document by computing the document's signature and comparing it to the provided signature {@link SignedDocument#signature}
+	 * Verify document by computing the document's signature and comparing it to
+	 * the provided signature {@link SignedDocument#signature}
+	 * 
 	 * @param document
 	 * @return
 	 */
-	public boolean verify(SignedDocument document) {
+	public void verify(SignedDocument document) throws VerificationException {
 
 		try {
 			Signature signature = document.getSignature();
 			if (signature == null)
-				return false;
+				throw new VerificationException("Signature is null");
 			String claimedHashCode = signature.getHashcode();
 			signature.setHashcode(null);
 
 			String json = mapper.writeValueAsString(document);
 			signature.setHashcode(claimedHashCode);
-			
+
 			String actualHashcode = hashcodeComputer.computeHashcode(json);
 			if (!actualHashcode.equals(claimedHashCode))
-				return false;
+				throw new VerificationException("document hashcode differs from expected hashcode");
 			Date now = clock.getNow();
 			if (now.after(signature.getValidUntil()))
-				return false;
-			return true;
+				throw new VerificationException("Signature expired");
+		} catch (VerificationException ve) {
+			throw ve;
 		} catch (Exception e) {
 			throw new VerificationException(e.getMessage());
 		}

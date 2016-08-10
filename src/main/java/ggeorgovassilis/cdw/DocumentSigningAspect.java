@@ -33,18 +33,32 @@ import ggeorgovassilis.cdw.signature.VerificationException;
 @Aspect
 public class DocumentSigningAspect {
 
+	/**
+	 * {@link DocumentSigner} to use for signing documents returned by services
+	 */
 	@Autowired
 	DocumentSigner documentSigner;
+	
+	/**
+	 * {@link DocumentVerifier} to use for verifying service method arguments
+	 */
 	@Autowired
 	DocumentVerifier verifier;
 	
+	public DocumentSigner getDocumentSigner() {
+		return documentSigner;
+	}
+
+	public DocumentVerifier getVerifier() {
+		return verifier;
+	}
+
 	@Before("execution(* ggeorgovassilis.cdw.services.*.*Service.*(..))")
 	public void anyServiceMethod(JoinPoint o) {
 		for (Object arg:o.getArgs())
 			if (arg instanceof SignedDocument){
 				SignedDocument doc = (SignedDocument)arg;
-				if (!verifier.verify(doc))
-					throw new VerificationException("Document failed to verify");
+				verifier.verify(doc);
 			}
 	}
 
