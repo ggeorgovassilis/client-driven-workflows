@@ -9,11 +9,7 @@
  */
 package ggeorgovassilis.cdw.time;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-
-import org.springframework.stereotype.Component;
 
 /**
  * Convenient factory for times which helps stable and predictable test
@@ -25,23 +21,18 @@ import org.springframework.stereotype.Component;
  *
  */
 
-@Component
-public class Clock {
+public interface Clock {
 
-	Date now = new Date();
+	/**
+	 * Return current time
+	 * @return
+	 */
+	Date getNow();
 
-	public Date getNow() {
-		return now;
-	}
-
-	public void setNow(Date now) {
-		this.now = now;
-	}
-
-	public Date getNowPlus(int seconds) {
-		Calendar c = new GregorianCalendar();
-		c.setTime(getNow());
-		c.add(Calendar.SECOND, seconds);
-		return c.getTime();
-	}
+	/**
+	 * Return current time off-set by "second" seconds
+	 * @param seconds
+	 * @return
+	 */
+	Date getNowPlus(int seconds);
 }

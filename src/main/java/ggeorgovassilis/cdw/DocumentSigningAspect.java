@@ -11,46 +11,52 @@ package ggeorgovassilis.cdw;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import ggeorgovassilis.cdw.signature.DocumentSigner;
+import ggeorgovassilis.cdw.signature.DocumentSignerJsonImpl;
+import ggeorgovassilis.cdw.signature.DocumentVerifierJsonImpl;
 import ggeorgovassilis.cdw.signature.DocumentVerifier;
+import ggeorgovassilis.cdw.signature.DocumentSigner;
 import ggeorgovassilis.cdw.signature.SignedDocument;
-import ggeorgovassilis.cdw.signature.VerificationException;
 
 /**
- * Spring AOP aspect that applies to services annotated with RestController when one of their methods is invoked and:
+ * Base class for a Spring AOP aspect that applies to services annotated with RestController when one of their methods is invoked and:
  * a) verifies all method arguments which extend {@link SignedDocument}
  * b) computes the signature for return values which extend {@link SignedDocument}
+ * 
  * @author george georgovassilis
  *
  */
 
-@RestControllerAdvice
-@Aspect
-public class DocumentSigningAspect {
+public abstract class DocumentSigningAspect {
 
 	/**
-	 * {@link DocumentSigner} to use for signing documents returned by services
+	 * {@link DocumentSignerJsonImpl} to use for signing documents returned by services
 	 */
 	@Autowired
-	DocumentSigner documentSigner;
+	DocumentSigner documentSignerJsonImpl;
 	
 	/**
-	 * {@link DocumentVerifier} to use for verifying service method arguments
+	 * {@link DocumentVerifierJsonImpl} to use for verifying service method arguments
 	 */
 	@Autowired
 	DocumentVerifier verifier;
 	
 	public DocumentSigner getDocumentSigner() {
-		return documentSigner;
+		return documentSignerJsonImpl;
 	}
 
 	public DocumentVerifier getVerifier() {
 		return verifier;
+	}
+
+	public void setDocumentSigner(DocumentSigner documentSigner) {
+		this.documentSignerJsonImpl = documentSigner;
+	}
+
+	public void setVerifier(DocumentVerifier verifier) {
+		this.verifier = verifier;
 	}
 
 	@Before("execution(* ggeorgovassilis.cdw.services.*.*Service.*(..))")
@@ -65,7 +71,7 @@ public class DocumentSigningAspect {
 	@AfterReturning(value = "@target(org.springframework.web.bind.annotation.RestController) && execution(* ggeorgovassilis.cdw.services.*.*.*(..))", returning = "document")
 	public void signReturnValue(JoinPoint o, SignedDocument document) {
 		if (document!=null){
-			documentSigner.sign(document);
+			documentSignerJsonImpl.sign(document);
 		}
 	}
 }

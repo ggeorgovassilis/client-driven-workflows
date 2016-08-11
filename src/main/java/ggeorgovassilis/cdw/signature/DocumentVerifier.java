@@ -9,15 +9,6 @@
  */
 package ggeorgovassilis.cdw.signature;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ggeorgovassilis.cdw.time.Clock;
-
 /**
  * Verifies a {@link SignedDocument}
  * 
@@ -25,16 +16,7 @@ import ggeorgovassilis.cdw.time.Clock;
  *
  */
 
-@Component
-public class DocumentVerifier {
-
-	@Autowired
-	Clock clock;
-
-	@Autowired
-	HashcodeComputer hashcodeComputer;
-
-	ObjectMapper mapper = new ObjectMapper();
+public interface DocumentVerifier {
 
 	/**
 	 * Verify document by computing the document's signature and comparing it to
@@ -43,29 +25,6 @@ public class DocumentVerifier {
 	 * @param document
 	 * @return
 	 */
-	public void verify(SignedDocument document) throws VerificationException {
+	void verify(SignedDocument document) throws VerificationException;
 
-		try {
-			Signature signature = document.getSignature();
-			if (signature == null)
-				throw new VerificationException("Signature is null");
-			String claimedHashCode = signature.getHashcode();
-			signature.setHashcode(null);
-
-			String json = mapper.writeValueAsString(document);
-			signature.setHashcode(claimedHashCode);
-
-			String actualHashcode = hashcodeComputer.computeHashcode(json);
-			if (!actualHashcode.equals(claimedHashCode))
-				throw new VerificationException("document hashcode differs from expected hashcode");
-			Date now = clock.getNow();
-			if (now.after(signature.getValidUntil()))
-				throw new VerificationException("Signature expired");
-		} catch (VerificationException ve) {
-			throw ve;
-		} catch (Exception e) {
-			throw new VerificationException(e.getMessage());
-		}
-
-	}
 }

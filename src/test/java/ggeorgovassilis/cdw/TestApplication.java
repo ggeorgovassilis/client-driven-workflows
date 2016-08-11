@@ -23,17 +23,17 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ggeorgovassilis.cdw.services.FixedTimeClockImpl;
 import ggeorgovassilis.cdw.services.erp.ListOfCostCenters;
 import ggeorgovassilis.cdw.services.hr.PersonnelIdentifier;
 import ggeorgovassilis.cdw.services.payroll.ExpenseClaim;
 import ggeorgovassilis.cdw.services.payroll.ExpenseReceipt;
 import ggeorgovassilis.cdw.signature.VerificationException;
-import ggeorgovassilis.cdw.time.Clock;
 
 public class TestApplication {
 
 	DispatcherServlet dispatcherServlet;
-	Clock clock;
+	FixedTimeClockImpl clock;
 	ObjectMapper mapper;
 
 	@Before
@@ -44,7 +44,7 @@ public class TestApplication {
 		dispatcherServlet = new DispatcherServlet();
 		dispatcherServlet.init(config);
 
-		clock = dispatcherServlet.getWebApplicationContext().getBean(Clock.class);
+		clock = dispatcherServlet.getWebApplicationContext().getBean(FixedTimeClockImpl.class);
 		mapper = new ObjectMapper();
 		clock.setNow(new Date(1234567890));
 	}
