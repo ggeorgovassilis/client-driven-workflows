@@ -1,6 +1,6 @@
 # client driven workflows
 
-Java/Spring example project for the concepts presented in [Scalability through client-driven workflows](https://georgovassilis.blogspot.com/2016/08/scalability-through-client-driven.html).
+Java/Spring example project for the concepts presented in [Scalability through client-driven workflows](https://blog.georgovassilis.com/2016/08/scalability-through-client-driven.html).
 
 The example code is a Java web application which demonstrates a simple expense claim form and consists of:
 - HRService which authenticates users by email and password and returns a digitally signed document with the users credentials
